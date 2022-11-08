@@ -13,6 +13,12 @@ type Client struct {
 	UserId int
 }
 
+type login struct {
+	AppId  uint32
+	UserId string
+	Client *Client
+}
+
 // 创建连接
 func NewClient(addr string, conn *websocket.Conn) *Client {
 
@@ -53,6 +59,6 @@ func (c *Client) WriteMsg() {
 
 }
 
-func (c *Client) SendMsg(cmd string, msg []byte) {
+func (c *Client) SendMsg(msg []byte) {
 
 }
