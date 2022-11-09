@@ -9,7 +9,7 @@ import (
 	"sync"
 )
 
-type DisposeFunc func(client *Client, seq int, message interface{}) (code uint32, msg string, data interface{})
+type DisposeFunc func(client *Client, seq int, message []byte) (code uint32, msg string, data interface{})
 
 var (
 	handlers        = make(map[string]DisposeFunc)
@@ -50,6 +50,12 @@ func MsgProcess(client *Client, message []byte) {
 		client.SendMsg([]byte("消息不合法"))
 	}
 
+	dataByte, err := json.Marshal(request.Data)
+	if err != err {
+		fmt.Println(err)
+		client.SendMsg([]byte("消息不合法"))
+	}
+
 	var (
 		code uint32
 		msg  string
@@ -57,7 +63,7 @@ func MsgProcess(client *Client, message []byte) {
 	)
 
 	if value, ok := GetHandle(request.Cmd); ok {
-		code, msg, data = value(client, request.Id, request.Data)
+		code, msg, data = value(client, request.Id, dataByte)
 	} else {
 		code = common.RoutingNotExist
 		msg = "参数错误，无此操作"

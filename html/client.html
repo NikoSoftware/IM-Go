@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Go WebSocket Tutorial</title>
+</head>
+<body>
+
+<input type="text" id="msg" value='
+{
+    "cmd":"login",
+    "data":{
+        "id":10001,
+        "password":"123456"
+    }
+}
+'>
+
+<input type="button" value="提交" onclick="call()">
+
+
+
+
+<script>
+
+    function call(){
+
+        let test = document.getElementById("msg").value
+        socket.send(test)
+    }
+
+    let socket = new WebSocket("ws://127.0.0.1:7300/ws");
+    console.log("Attempting Connection...");
+
+    let a ={
+        cmd:1,
+        msg:"hello world"
+    }
+
+
+
+
+    socket.onopen = () => {
+        console.log("Successfully Connected");
+        socket.send(
+            JSON.stringify(a)
+        )
+    };
+
+
+
+    socket.onclose = event => {
+        console.log("Socket Closed Connection: ", event);
+        socket.send("Client Closed!")
+    };
+
+    socket.onerror = error => {
+        console.log("Socket Error: ", error);
+    };
+
+</script>
+</body>
+</html>

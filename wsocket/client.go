@@ -13,9 +13,8 @@ type Client struct {
 	UserId int
 }
 
-type login struct {
-	AppId  uint32
-	UserId string
+type Login struct {
+	UserId int
 	Client *Client
 }
 
