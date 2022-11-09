@@ -73,7 +73,7 @@ func (manager *DisposeChan) EventRegister(conn *Client) {
 
 func (manager *DisposeChan) EventLogin(login *Login) {
 
-	login.Client.isLogin = true
+	login.Client.IsLogin = true
 
 	ClientManagerService.Users[login.UserId] = login.Client
 
