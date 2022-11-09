@@ -73,6 +73,8 @@ func (manager *DisposeChan) EventRegister(conn *Client) {
 
 func (manager *DisposeChan) EventLogin(login *Login) {
 
+	login.Client.isLogin = true
+
 	ClientManagerService.Users[login.UserId] = login.Client
 
 	log.Printf("用户登陆：%v", login.UserId)

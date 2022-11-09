@@ -53,3 +53,18 @@ func LoginController(client *wsocket.Client, seq int, message []byte) (code uint
 
 	return
 }
+
+// 心跳
+func HeartbeatController(client *wsocket.Client, seq int, message []byte) (code uint32, msg string, data interface{}) {
+
+	code = common.OK
+
+	if !client.IsLogin {
+		code = common.NotLoggedIn
+		return
+	}
+
+	client.UpdateHeartbeatTime(time.Now().UnixMilli())
+
+	return
+}
