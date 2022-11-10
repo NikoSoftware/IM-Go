@@ -1,6 +1,9 @@
 package wsocket
 
-import "log"
+import (
+	"log"
+	"sync"
+)
 
 var (
 	ClientManagerService *ClientManager
@@ -8,8 +11,10 @@ var (
 )
 
 type ClientManager struct {
-	Clients map[string]*Client
-	Users   map[int]*Client
+	Clients     map[string]*Client
+	ClientsLock sync.RWMutex // 读写锁
+	Users       map[int]*Client
+	UserLock    sync.RWMutex // 读写锁
 }
 
 type DisposeChan struct {
@@ -83,4 +88,19 @@ func (manager *DisposeChan) EventLogin(login *Login) {
 
 func (manager *DisposeChan) EventUnregister(conn *Client) {
 
+}
+
+func (manager *ClientManager) HeartbeatOutTimeClose() {
+	defer manager.UserLock.Unlock()
+	manager.UserLock.Lock()
+
+	for _, client := range manager.Users {
+
+		if client.IsHeartbeatOutTime() {
+			client.Conn.Close()
+		}
+
+	}
+
+	return
 }
