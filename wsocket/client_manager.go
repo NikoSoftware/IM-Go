@@ -40,6 +40,7 @@ func NewClientManagerInit() {
 		Unregister: make(chan *Client, 1000),
 	}
 
+	go ScheduleTaskStart()
 }
 
 // 管道处理程序
